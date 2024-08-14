@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #myVideo {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+        z-index: -1;
+      }
+
+      .container {
+        width: 80vw; /* Responsive width */
+        max-width: 400px;
+        padding: 20px;
+        margin: 10vh auto; /* Add margin to bring container down */
+        background-color: rgba(162, 18, 18, 0.85); /* More opaque background */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        position: relative;
+      }
+
+      .question {
+        font-size: 5vw; /* Responsive font size */
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 20px;
+      }
+
+      .options {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .option {
+        flex: 1;
+        padding: 10px 0;
+        background-color: #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 4vw; /* Responsive font size */
+        transition: background-color 0.3s ease;
+      }
+
+      .option:hover {
+        background-color: #bbb;
+      }
+
+      .link {
+        font-size: 4vw;
+        margin-top: 20px;
+        color: #fff;
+      }
+
+      #emoji {
+        position: absolute;
+        font-size: 8vw; /* Larger for better visibility */
+        transition: transform 1s ease;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .modal-content {
+        max-width: 90%;
+        max-height: 80%;
+        background-color: #c01f54;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+
+      .modal-content p {
+        font-size: 5vw; /* Responsive font size */
+        color: #fff;
+        margin-bottom: 20px;
+      }
+
+      .modal-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <video autoplay muted loop id="myVideo">
+      <source
+        src="https://static.vecteezy.com/system/resources/previews/003/146/726/mp4/red-circle-particles-bokeh-light-background-free-video.mp4"
+        type="video/mp4"
+      />
+    </video>
+
+    <div class="container">
+      <div class="question">Joe wanna go on a Date with Me?</div>
+      <div class="options">
+        <div
+          class="option"
+          onmouseover="updateEmoji('smile')"
+          onmouseout="updateEmoji('')"
+          onclick="showModal('https://media4.giphy.com/media/l30XwNHYd3sA9rWR9w/giphy.gif?cid=ecf05e479tj7kipc2akburur4c51ntkkcu76mwglbtn2o3ym&ep=v1_gifs_search&rid=giphy.gif&ct=g')"
+        >
+          Yes
+        </div>
+        <div
+          class="option"
+          onmouseover="updateEmoji('sad');"
+          onmouseout="updateEmoji('');"
+          onclick="moveBox('No')"
+        >
+          No
+        </div>
+      </div>
+      <div id="emoji"></div>
+    </div>
+
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <p>I ALREADY KNEW IT....</p>
+        <img id="modalImage" src="" alt="Image" />
+      </div>
+    </div>
+
+    <script>
+      var box = document.querySelector(".container");
+      var emoji = document.getElementById("emoji");
+      var emojiTimeout;
+
+      var modal = document.getElementById("myModal");
+      var modalImage = document.getElementById("modalImage");
+
+      function updateEmoji(mood) {
+        emoji.innerHTML = mood === "smile" ? "😊" : "😢";
+        emoji.classList.toggle("sad", mood === "sad");
+
+        clearTimeout(emojiTimeout);
+        emojiTimeout = setTimeout(function () {
+          emoji.innerHTML = "";
+        }, 1000);
+      }
+
+      function moveBox(option) {
+        if (option === "Yes") {
+          return;
+        }
+
+        var boxPositionX =
+          Math.random() * (window.innerWidth - box.offsetWidth);
+        var boxPositionY =
+          Math.random() * (window.innerHeight - box.offsetHeight);
+
+        box.style.left = boxPositionX + "px";
+        box.style.top = boxPositionY + "px";
+        box.style.position = "absolute"; // Ensure the box can move
+
+        updateEmoji("");
+      }
+
+      function showModal(imageUrl) {
+        modalImage.src = imageUrl;
+        modal.style.display = "flex"; // Use flex to center content
+      }
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    </script>
+  </body>
+</html>
